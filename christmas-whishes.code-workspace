@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "api"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {
+		"azure.tenant": "elven.onmicrosoft.com",
+		"debug.internalConsoleOptions": "neverOpen"
+	}
+}

@@ -1,0 +1,9 @@
+{
+    "name": "christmas-whishes",
+    "version": "1.0.0",
+    "description": "Christmas Whishes Web Application for Festive Tech Calendar",
+    "main": "index.html",
+    "scripts": {
+      "start": "npx serve"
+    }
+  }
