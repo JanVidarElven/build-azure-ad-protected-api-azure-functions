@@ -20,7 +20,7 @@
       methods: {
         getWhishes() {
           this.whishes = axios
-            .get(`${API}/whishes`)
+            .get(`${API}/whish`)
             .then((response) => {
               this.whishes = response.data;
             })
@@ -28,9 +28,9 @@
               this.showError("Get", err.message);
             });
         },
-        updateWhish(index) {
+        updateWhish(id, index, name, whish) {
           axios
-            .put(`${API}/whish`, this.whishes[index])
+            .put(`${API}/whish/${id}`, {"id": id, "index": index, "name": name, "whish": whish})
             .then(() => {
               this.showSuccess("Whish updated");
             })
@@ -52,13 +52,12 @@
               this.showModal = false;
             });
         },
-        deleteWhish(id, pronounName, index) {
+        deleteWhish(id, index) {
           axios
-            .delete(`${API}/whish/${id}`, {
+            .delete(`${API}/whish/${id}`,
+            {
               data: {
-                pronoun: {
-                  name: pronounName
-                }
+                index: index
               }
             })
             .then(() => {

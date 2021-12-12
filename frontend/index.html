@@ -48,7 +48,7 @@
                   <th>Name</th>
                   <th>Pronoun</th>
                   <th>Whish</th>
-                  <th>When</th>
+                  <th>Created</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -66,26 +66,24 @@
                   <td>
                     <input
                       class="input"
-                      type="number"
-                      v-model="whish.price"
+                      type="text"
+                      v-model="whish.whish"
                     />
                   </td>
                   <td>
-                    <input
-                      class="input"
-                      type="number"
-                      v-model="whish.stockUnits"
-                    />
+                    <label for="" class="text">
+                      {{ whish.created }}
+                    </label>
                   </td>
                   <td align="center">
-                    <button class="button" @click="updateWhish(index)">
+                    <button class="button" @click="updateWhish(whish.id, index, whish.name, whish.whish)">
                       Update
                     </button>
                   </td>
                   <td>
                     <a
                       class="delete is-large has-background-danger"
-                      @click="deleteWhish(whish.id, whish.pronoun.name, index)"
+                      @click="deleteWhish(whish.id, index)"
                     ></a>
                   </td>
                 </tr>
@@ -130,7 +128,7 @@
             </div>
             <div class="field">
               <p class="control">
-                <input type="text" class="input" placeholder="Your Whish" v-model="newWhish.price" />
+                <input type="text" class="input" placeholder="Your Whish" v-model="newWhish.whish" />
               </p>
             </div>
             <button class="button is-info" @click="createWhish()">Create</button>
