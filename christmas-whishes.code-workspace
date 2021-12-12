@@ -8,7 +8,12 @@
 		}
 	],
 	"settings": {
-		"azure.tenant": "elven.onmicrosoft.com",
-		"debug.internalConsoleOptions": "neverOpen"
+		"debug.internalConsoleOptions": "neverOpen",
+		"markdownlint.config": {
+			"MD028": false,
+			"MD025": {
+				"front_matter_title": ""
+			}
+		}
 	}
 }
