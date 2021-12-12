@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "Request",
+      "methods": [
+        "post"
+      ],
+      "route": "whish"      
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "Response"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "CosmosOutput",
+      "direction": "out",
+      "connectionStringSetting": "Festive_CosmosDB",
+      "databaseName": "festivetechcalendar",
+      "collectionName": "whishes"
+    }    
+  ]
+}

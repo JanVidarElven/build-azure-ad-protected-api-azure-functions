@@ -1,0 +1,35 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "Request",
+      "methods": [
+        "delete"
+      ],
+      "route": "whish/{id?}"      
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "Response"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "CosmosInput",
+      "direction": "in",
+      "connectionStringSetting": "Festive_CosmosDB",
+      "databaseName": "festivetechcalendar",
+      "collectionName": "whishes"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "CosmosOutput",
+      "direction": "out",
+      "connectionStringSetting": "Festive_CosmosDB",
+      "databaseName": "festivetechcalendar",
+      "collectionName": "whishes"
+    }        
+  ]
+}
