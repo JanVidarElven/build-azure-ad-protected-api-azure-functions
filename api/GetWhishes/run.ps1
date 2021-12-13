@@ -17,13 +17,15 @@ else {
     [array]$Whishes = $CosmosInput
 }
 
-# Change the output if there are not entries in the CosmosDB
+# Change the output (if needed) if there are not entries in the CosmosDB
 if ($Whishes.Count -eq 0) {
-    $jsonResponse = $Whishes | Select-Object Id, Name, Whish, Pronoun, Created | ConvertTo-Json
+    $response = $Whishes | Select-Object Id, Name, Whish, Pronoun, Created
 }
 else {
-    $jsonResponse = $Whishes | Select-Object Id, Name, Whish, Pronoun, Created | ConvertTo-Json
+    $response = $Whishes | Select-Object Id, Name, Whish, Pronoun, Created
 }
+
+$jsonResponse = ConvertTo-Json @($response)
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{

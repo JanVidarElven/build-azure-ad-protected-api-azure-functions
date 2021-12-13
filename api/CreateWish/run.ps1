@@ -26,10 +26,12 @@ $whish = [PSCustomObject]@{
 # Push new whish to Cosmos DB
 Push-OutputBinding -Name CosmosOutput -Value $whish
 
-$body = "Whish with Id " + $whish.id + " created successfully."
+Write-Host ("Whish with Id " + $whish.id + " created successfully.")
+
+$jsonResponse = $whish | ConvertTo-Json
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
     StatusCode = [HttpStatusCode]::OK
-    Body = $body
+    Body = $jsonResponse
 })
