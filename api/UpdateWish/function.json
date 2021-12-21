@@ -6,9 +6,8 @@
       "direction": "in",
       "name": "Request",
       "methods": [
-        "put"
-      ],
-      "route": "whish/{id?}"
+        "get, post"
+      ]
     },
     {
       "type": "http",
