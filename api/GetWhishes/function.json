@@ -2,7 +2,7 @@
   "bindings": [
     {
       "authLevel": "function",
-      "type": "httpTrigger",
+      "type": "HttpTrigger",
       "direction": "in",
       "name": "Request",
       "methods": [
