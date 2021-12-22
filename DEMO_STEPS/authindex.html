@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="https://festivetechcalendar.com/assets/js/snowstorm-min.js"></script>    
+    <!-- msal.js with a fallback to backup CDN -->
+    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.2.1/js/msal.js" integrity="sha384-9TV1245fz+BaI+VvCjMYL0YDMElLBwNS84v3mY57pXNOt6xcUYch2QLImaTahcOP" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      if(typeof Msal === 'undefined')document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.2.1/js/msal.js' type='text/javascript' integrity='sha384-m/3NDUcz4krpIIiHgpeO0O8uxSghb+lfBTngquAo2Zuy2fEF+YgFeP08PWFo5FiJ' crossorigin='anonymous'%3E%3C/script%3E"));
+    </script>    
+    <title>Festive Tech Calendar - Christmas Whishes</title>
+    <style>
+      #toast {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        padding: 20px;
+        z-index: 99999;
+      }
+    </style>
+    <!-- adding Bootstrap 4 for UI components  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  </head>
+  <style></style> 
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <div class="hero is-info is-bold">
+            <div class="hero-body">
+                <img src="festivetechcalendar.jpg" width="500px">
+              <h1 class="is-size-1">Christmas Whishes</h1>
+            </div>
+          </div>
+        </div>
+      
+      </header>
+      <section class="section">
+        <div class="container">
+          <div>
+            <button type="button" id="signIn" class="btn btn-success" onclick="signIn()">Sign In</button>
+            <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
+          </div>
+          <div>
+            <h5 class="is-size-4" id="welcomeMessage">Please sign-in to create or see whishes.</h5>
+          </div>
+          <div>
+            <button type="button" id="seeWhishes" class="btn btn-success" onclick="seeWhishes()">Load Whishes</button>
+            <button class="button is-info" @click="showModal = true">
+              + Create Wish
+            </button>
+          </div>
+          <div>
+            <table class="table is-fullwidth is-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Pronoun</th>
+                  <th>Whish</th>
+                  <th>Created</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(whish, index) in whishes" v-key="whish.id">
+                  <td>
+                    <input class="input" type="text" v-model="whish.name" />
+                  </td>
+                  <td>
+                    <label for="" class="label">
+                      {{ whish.pronoun.name }}
+                    </label>
+                  </td>
+                  <td>
+                    <input
+                      class="input"
+                      type="text"
+                      v-model="whish.whish"
+                    />
+                  </td>
+                  <td>
+                    <label for="" class="text">
+                      {{ whish.created }}
+                    </label>
+                  </td>
+                  <td align="center">
+                    <button class="button" @click="updateWhish(whish.id, index, whish.name, whish.whish)">
+                      Update
+                    </button>
+                  </td>
+                  <td>
+                    <a
+                      class="delete is-large has-background-danger"
+                      @click="deleteWhish(whish.id, index)"
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="has-text-centered" v-show="whishes.length < 1">
+              <h2 class="is-size-4 has-text-info">Loading...</h2>
+            </div>
+          </div>
+          <div id="toast" v-show="toast.show" class="container" :class="['has-background-' + toast.type]">
+            <h2 class="is-size-5 has-text-white">{{ toast.message }}</h2>
+          </div>
+        </div>
+      </section>
+      <div class="modal" :class="{ 'is-active': showModal }">
+        <div class="modal-background" @click="showModal = false"></div>
+        <div class="modal-content">
+          <div class="box">
+            <h3 class="is-size-3">Create Christmas Whish</h3>
+            <hr />
+            <div class="field">
+              <p class="control">
+                <input
+                  v-model="newWhish.name"
+                  class="input"
+                  type="text"
+                  placeholder="Your Name"
+                  value=""
+                />
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <div class="select">
+                  <select v-model="newWhish.pronoun.name">
+                    <option v-for="pronoun in pronouns" v-bind:value="pronoun">
+                      {{ pronoun }}
+                    </option>
+                  </select>
+                </div>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <input type="text" class="input" placeholder="Your Whish" v-model="newWhish.whish" />
+              </p>
+            </div>
+            <button class="button is-info" @click="createWhish()">Create</button>
+          </div>
+        </div>
+        <button
+          class="modal-close is-large"
+          aria-label="close"
+          @click="showModal = false"
+        ></button>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <!-- importing auth app scripts (load order is important) -->
+    <script type="text/javascript" src="./authConfig.js"></script>
+    <script type="text/javascript" src="./apiConfig.js"></script>
+    <script type="text/javascript" src="./authUi.js"></script>    
+    <script type="text/javascript" src="./authPopup.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+  </body>
+</html>
