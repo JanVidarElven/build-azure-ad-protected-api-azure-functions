@@ -2,13 +2,12 @@
   "bindings": [
     {
       "authLevel": "function",
-      "type": "httpTrigger",
+      "type": "HttpTrigger",
       "direction": "in",
       "name": "Request",
       "methods": [
-        "delete"
-      ],
-      "route": "whish/{id?}"      
+        "get, post"
+      ] 
     },
     {
       "type": "http",
