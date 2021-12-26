@@ -1,4 +1,10 @@
-const myMSALObj = new Msal.UserAgentApplication(msalConfig);
+// OLD Msal v1 stuff: const myMSALObj = new Msal.UserAgentApplication(msalConfig);
+
+// Create the main myMSALObj instance
+// configuration parameters are located at authConfig.js
+const myMSALObj = new Msal.PublicClientApplication(msalConfig);
+
+let username = "";
 
 function signIn() {
   myMSALObj.loginPopup(loginRequest)
