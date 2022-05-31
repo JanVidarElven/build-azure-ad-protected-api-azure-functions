@@ -1,7 +1,7 @@
 {
-    "name": "christmas-whishes",
+    "name": "whishes",
     "version": "1.0.0",
-    "description": "Christmas Whishes Web Application for Festive Tech Calendar",
+    "description": "Whishes Web Application for Azure AD Protected Web API with Azure Functions",
     "main": "index.html",
     "scripts": {
       "start": "npx serve"

@@ -18,7 +18,8 @@ Azure PowerShell: Az.CosmosDB version 1.2.0 or higher
 Azure CLI: version 2.24.0 or higher
 #>
 
-$resourceGroupName = "<myResourceGroup>"
+# The following steps are needed for letting users and/or managed identity access the data plane for Cosmos DB SQL API
+<# $resourceGroupName = "<myResourceGroup>"
 $accountName = "<myCosmosAccount>"
 $readOnlyRoleDefinitionId = "<roleDefinitionId>" # as fetched above
 $principalId = "<aadPrincipalId>"
@@ -27,14 +28,16 @@ New-AzCosmosDBSqlRoleAssignment -AccountName $accountName `
     -RoleDefinitionId $readOnlyRoleDefinitionId `
     -Scope "/" `
     -PrincipalId $principalId
+ #>
 
+# Replace the following variables with values from your environment:
 $subscriptionId = "<subscriptionId_for_Azure_subscription_for_resources>"
 Set-AzContext -Subscription $subscriptionId
 $principalUpn = "<user_upn_for_member_or_guest_to_assign_access>"
 $managedIdentityName = "<name_of_managed_identity_connected_to_function_app>"
 
-$resourceGroupName = "rg-festivetechcalendar"
-$accountName = "festivetechcalendar-christmaswhishes"
+$resourceGroupName = "rg-demoazureadprotected-api"
+$accountName = "cosmos-elven-protected-api"
 $readOnlyRoleDefinitionId = "00000000-0000-0000-0000-000000000001" # as fetched above
 $contributorRoleDefinitionId = "00000000-0000-0000-0000-000000000002" # as fetched above
 
