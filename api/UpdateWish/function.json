@@ -18,17 +18,17 @@
       "type": "cosmosDB",
       "name": "CosmosInput",
       "direction": "in",
-      "connectionStringSetting": "Festive_CosmosDB",
-      "databaseName": "festivetechcalendar",
+      "connectionStringSetting": "ProtectedAPI_CosmosDB",
+      "databaseName": "protectedapidb",
       "collectionName": "whishes"
     },
     {
       "type": "cosmosDB",
       "name": "CosmosOutput",
       "direction": "out",
-      "connectionStringSetting": "Festive_CosmosDB",
-      "databaseName": "festivetechcalendar",
+      "connectionStringSetting": "ProtectedAPI_CosmosDB",
+      "databaseName": "protectedapidb",
       "collectionName": "whishes"
-    }    
+    }  
   ]
 }

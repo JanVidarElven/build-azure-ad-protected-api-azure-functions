@@ -18,9 +18,9 @@
       "type": "cosmosDB",
       "name": "CosmosOutput",
       "direction": "out",
-      "connectionStringSetting": "Festive_CosmosDB",
-      "databaseName": "festivetechcalendar",
+      "connectionStringSetting": "ProtectedAPI_CosmosDB",
+      "databaseName": "protectedapidb",
       "collectionName": "whishes"
-    }    
+    } 
   ]
 }

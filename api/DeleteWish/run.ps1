@@ -15,8 +15,8 @@ else {
 }
 
 # Build the Document Uri for Cosmos DB REST API
-$cosmosConnection = $env:Festive_CosmosDB -replace ';',"`r`n" | ConvertFrom-StringData
-$documentUri = $cosmosConnection.AccountEndpoint + "dbs/" + "festivetechcalendar" + "/colls/" + "whishes" + "/docs/" + $whish.id
+$cosmosConnection = $env:ProtectedAPI_CosmosDB -replace ';',"`r`n" | ConvertFrom-StringData
+$documentUri = $cosmosConnection.AccountEndpoint + "dbs/" + "protectedapidb" + "/colls/" + "whishes" + "/docs/" + $whish.id
 
 # Check if running with MSI (in Azure) or Interactive User (local VS Code)
 If ($env:MSI_SECRET) {

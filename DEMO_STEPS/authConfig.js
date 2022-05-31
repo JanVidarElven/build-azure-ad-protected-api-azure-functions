@@ -17,5 +17,5 @@ const msalConfig = {
 
   // Add here scopes for access token to be used at API endpoints.
   const tokenRequest = {
-    scopes: ["api://festivetechcalendarapi/access_as_user", "api://festivetechcalendarapi/Whish.ReadWrite"]
+    scopes: ["api://yourprotectedapi/access_as_user", "api://yourprotectedapi/Whish.ReadWrite"]
   };
