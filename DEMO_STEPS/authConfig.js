@@ -14,8 +14,3 @@ const msalConfig = {
   const loginRequest = {
     scopes: ["openid", "profile"]
   };
-
-  // Add here scopes for access token to be used at API endpoints.
-  const tokenRequest = {
-    scopes: ["api://yourprotectedapi/access_as_user", "api://yourprotectedapi/Whish.ReadWrite"]
-  };

@@ -1,68 +1,48 @@
-// OLD Msal v1 stuff: const myMSALObj = new Msal.UserAgentApplication(msalConfig);
-
 // Create the main myMSALObj instance
 // configuration parameters are located at authConfig.js
-const myMSALObj = new Msal.PublicClientApplication(msalConfig);
+const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
 let username = "";
 
-function signIn() {
-  myMSALObj.loginPopup(loginRequest)
-    .then(loginResponse => {
-      console.log('id_token acquired at: ' + new Date().toString());
-      console.log(loginResponse);
+function loadPage() {
+    /**
+     * See here for more info on account retrieval:
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+     */
+    const currentAccounts = myMSALObj.getAllAccounts();
+    if (currentAccounts === null) {
+        return;
+    } else if (currentAccounts.length > 1) {
+        // Add choose account code here
+        console.warn("Multiple accounts detected.");
+    } else if (currentAccounts.length === 1) {
+        username = currentAccounts[0].username;
+        showWelcomeMessage(currentAccounts[0]);
+    }
+}
 
-      if (myMSALObj.getAccount()) {
-        showWelcomeMessage(myMSALObj.getAccount());
-      }
-    }).catch(error => {
-      console.log(error);
+function handleResponse(resp) {
+    if (resp !== null) {
+        username = resp.account.username;
+        console.log('id_token acquired at: ' + new Date().toString());        
+        showWelcomeMessage(resp.account);
+    } else {
+        loadPage();
+    }
+}
+
+function signIn() {
+    myMSALObj.loginPopup(loginRequest).then(handleResponse).catch(error => {
+        console.error(error);
     });
 }
 
 function signOut() {
-  myMSALObj.logout();
+    const logoutRequest = {
+        account: myMSALObj.getAccountByUsername(username)
+    };
+
+    myMSALObj.logout(logoutRequest);
 }
 
-function callWhishesAPI(theUrl, accessToken, callback) {
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-         callback(JSON.parse(this.responseText));
-      }
-  }
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous
-  xmlHttp.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-  xmlHttp.send();
-}
-
-function getTokenPopup(request) {
-  return myMSALObj.acquireTokenSilent(request)
-    .catch(error => {
-      console.log(error);
-      console.log("silent token acquisition fails. acquiring token using popup");
-
-      // fallback to interaction when silent call fails
-        return myMSALObj.acquireTokenPopup(request)
-          .then(tokenResponse => {
-            return tokenResponse;
-          }).catch(error => {
-            console.log(error);
-          });
-    });
-}
-
-function seeWhishes() {
-  if (myMSALObj.getAccount()) {
-    getTokenPopup(tokenRequest)
-      .then(response => {
-        callWhishesAPI(apiConfig.whishesEndpoint, response.accessToken, updateUI);
-        const token = response.accessToken;
-        // profileButton.classList.add('d-none');
-        // mailButton.classList.remove('d-none');
-      }).catch(error => {
-        console.log(error);
-      });
-  }
-}
-
+loadPage();

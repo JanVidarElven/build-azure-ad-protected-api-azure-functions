@@ -1,13 +1,14 @@
 // Select DOM elements to work with
 const welcomeDiv = document.getElementById("welcomeMessage");
 const signInButton = document.getElementById("signIn");
-const signOutButton = document.getElementById('signOut');
 
 function showWelcomeMessage(account) {
   // Reconfiguring DOM elements
-  welcomeDiv.innerHTML = `Welcome ${account.name}`;
-  signInButton.classList.add('d-none');
-  signOutButton.classList.remove('d-none');
+  welcomeDiv.innerHTML = `Welcome ${account.username}`;
+  signInButton.setAttribute("onclick", "signOut();");
+  signInButton.setAttribute('class', "btn btn-success")
+  signInButton.innerHTML = "Sign Out";
+  console.log (account.username);  
 }
 
 function updateUI(data, endpoint) {

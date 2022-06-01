@@ -20,4 +20,14 @@ This represent the resource that the Access Token will be for.
 
 Send both unauthenticated and authenticated requests in Postman and check response. When authenticated check monitor in Function for running requests.
 
+## Remove Function Authentication from Functions
 
+With Authentication required, we no longer need the function code. For each function change the authLevel from "function" to "anonymous" as shown below:
+
+```json
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "HttpTrigger",
+```
