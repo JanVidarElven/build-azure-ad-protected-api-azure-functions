@@ -1,4 +1,34 @@
-# Demo Steps & Resources for Azure Functions
+# DEMO - Azure AD Protected API - Part 2
+
+## Create App Registrations in Azure AD for Resource API and Client
+
+Create two App Registrations in Azure AD for:
+
+- Whishes API, Multi-Tenant and Microsoft Accounts
+- Whishes Client, Multi-Tenant and Microsoft Accounts
+
+In the Whishes API, select to Expose an API, og set the App ID URI to something like api://whishesapi.
+
+Add scopes for:
+
+- access_as_user (User and Admin Consent)
+- Whish.Read (User and Admin Consent)
+- Whish.ReadWrite (User and Admin Consent)
+- Whish.ReadWrite.All (Admin Consent only)
+
+In the Whishes Client App Registration, add the API permissions for the Whises API, do not consent on behalf of organization.
+
+Add Authentication Platforms for:
+
+- Web and Postman Redirect URI: https://oauth.pstmn.io/v1/callback
+- SPA and Redirect URI: http://localhost:3000
+
+Make sure to support ID and Access Token for Implicit Flows, in the Manifest it should show like this:
+
+```json
+	"oauth2AllowIdTokenImplicitFlow": true,
+	"oauth2AllowImplicitFlow": true,
+```
 
 ## Add Module for Extracting JWT Token and Claims
 
@@ -6,7 +36,7 @@
 @{
     # For latest supported version, go to 'https://www.powershellgallery.com/packages/Az'.
     # To use the Az module in your function app, please uncomment the line below.
-    'Az' = '7.*'
+    'Az' = '8.*'
     'JWTDetails' = '1.*'
 }
 ```
@@ -75,3 +105,14 @@ $whish = [PSCustomObject]@{
 }
 
 ```
+
+## Set up Authentication in Postman using OAuth 2.0
+
+Use the Client ID, Tenant ID and the Client Secret from the Client App Registration, and use Authorization Code Flow to get an access token for the Whishes API. 
+
+This Bearer token can now be added to the Authorization Header for Postman requests so that requests can be authorized.
+
+## Publish Function App to Azure
+
+The local Function App project can now be published to the Azure Function App, and are ready for requiring authentication.
+

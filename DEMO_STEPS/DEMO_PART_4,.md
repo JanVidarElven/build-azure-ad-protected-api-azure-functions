@@ -1,5 +1,6 @@
-# Demo Steps & Resources for Msal.js v2
+# DEMO - Azure AD Protected API - Part 4
 
+Part 4 will show demo steps & resources for Msal.js v2 in the Web Frontend.
 ## Add authConfig.js
 
 Add a file authConfig.js to the frontend folder with the following code:
@@ -24,7 +25,7 @@ const msalConfig = {
 
   // Add here scopes for access token to be used at API endpoints.
   const tokenRequest = {
-    scopes: ["api://festivetechcalendarapi/access_as_user", "api://festivetechcalendarapi/Whish.ReadWrite"]
+    scopes: ["api://whishesapi/access_as_user", "api://whishesapi/Whish.ReadWrite"]
   };
 ```
 
