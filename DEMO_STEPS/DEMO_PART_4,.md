@@ -23,10 +23,6 @@ const msalConfig = {
     scopes: ["openid", "profile"]
   };
 
-  // Add here scopes for access token to be used at API endpoints.
-  const tokenRequest = {
-    scopes: ["api://whishesapi/access_as_user", "api://whishesapi/Whish.ReadWrite"]
-  };
 ```
 
 Change the above code to your app id from the frontend app registration, and if you have other names for the api scopes change that as well for the tokenRequest constant.
@@ -51,13 +47,14 @@ Add a file authUI.js to the frontend folder with the following code:
 // Select DOM elements to work with
 const welcomeDiv = document.getElementById("welcomeMessage");
 const signInButton = document.getElementById("signIn");
-const signOutButton = document.getElementById('signOut');
 
 function showWelcomeMessage(account) {
   // Reconfiguring DOM elements
-  welcomeDiv.innerHTML = `Welcome ${account.name}`;
-  signInButton.classList.add('d-none');
-  signOutButton.classList.remove('d-none');
+  welcomeDiv.innerHTML = `Welcome ${account.username}`;
+  signInButton.setAttribute("onclick", "signOut();");
+  signInButton.setAttribute('class', "btn btn-success")
+  signInButton.innerHTML = "Sign Out";
+  console.log (account.username);  
 }
 
 function updateUI(data, endpoint) {
@@ -76,69 +73,67 @@ Add a new file to the frontend folder with the name authPopup.js, and add the fo
 
 // Create the main myMSALObj instance
 // configuration parameters are located at authConfig.js
-const myMSALObj = new Msal.PublicClientApplication(msalConfig);
+const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
 let username = "";
 
-function signIn() {
-  myMSALObj.loginPopup(loginRequest)
-    .then(loginResponse => {
-      console.log('id_token acquired at: ' + new Date().toString());
-      console.log(loginResponse);
+function loadPage() {
+    /**
+     * See here for more info on account retrieval:
+     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+     */
+    const currentAccounts = myMSALObj.getAllAccounts();
+    if (currentAccounts === null) {
+        return;
+    } else if (currentAccounts.length > 1) {
+        // Add choose account code here
+        console.warn("Multiple accounts detected.");
+    } else if (currentAccounts.length === 1) {
+        username = currentAccounts[0].username;
+        showWelcomeMessage(currentAccounts[0]);
+    }
+}
 
-      if (myMSALObj.getAccount()) {
-        showWelcomeMessage(myMSALObj.getAccount());
-      }
-    }).catch(error => {
-      console.log(error);
+function handleResponse(resp) {
+    if (resp !== null) {
+        username = resp.account.username;
+        console.log('id_token acquired at: ' + new Date().toString());        
+        showWelcomeMessage(resp.account);
+    } else {
+        loadPage();
+    }
+}
+
+function signIn() {
+    myMSALObj.loginPopup(loginRequest).then(handleResponse).catch(error => {
+        console.error(error);
     });
 }
 
 function signOut() {
-  myMSALObj.logout();
+    const logoutRequest = {
+        account: myMSALObj.getAccountByUsername(username)
+    };
+
+    myMSALObj.logout(logoutRequest);
 }
 
-function callWhishesAPI(theUrl, accessToken, callback) {
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-         callback(JSON.parse(this.responseText));
-      }
-  }
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous
-  xmlHttp.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-  xmlHttp.send();
-}
-
-function getTokenPopup(request) {
-  return myMSALObj.acquireTokenSilent(request)
-    .catch(error => {
-      console.log(error);
-      console.log("silent token acquisition fails. acquiring token using popup");
-
-      // fallback to interaction when silent call fails
-        return myMSALObj.acquireTokenPopup(request)
-          .then(tokenResponse => {
-            return tokenResponse;
-          }).catch(error => {
-            console.log(error);
-          });
-    });
-}
-
-function seeWhishes() {
-  if (myMSALObj.getAccount()) {
-    getTokenPopup(tokenRequest)
-      .then(response => {
-        callWhishesAPI(apiConfig.whishesEndpoint, response.accessToken, updateUI);
-        const token = response.accessToken;
-        // profileButton.classList.add('d-none');
-        // mailButton.classList.remove('d-none');
-      }).catch(error => {
-        console.log(error);
-      });
-  }
-}
-
+loadPage();
 
 ```
+
+## Replace index.js
+
+Next, rename the existing index.js, for example to noauth_index.js, and copy the contents of the authindex.js in this repo to a new index.js file.
+
+This will implement support for MSAL authentication, and securely authenticating to the API.
+
+## Replace index.html
+
+Rename the existing index.html, for example to noauth_index.html, and copy the contents of the authindex.html in this repo to a new index.html file.
+
+This will implement sign in and authorization support in the web front end.
+
+## Test localhost
+
+Run *npm start* and now test the sign in and authentication to the API.

@@ -9,12 +9,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script type="text/javascript" src="https://festivetechcalendar.com/assets/js/snowstorm-min.js"></script>    
-    <!-- msal.js with a fallback to backup CDN -->
-    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.2.1/js/msal.js" integrity="sha384-9TV1245fz+BaI+VvCjMYL0YDMElLBwNS84v3mY57pXNOt6xcUYch2QLImaTahcOP" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-      if(typeof Msal === 'undefined')document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.2.1/js/msal.js' type='text/javascript' integrity='sha384-m/3NDUcz4krpIIiHgpeO0O8uxSghb+lfBTngquAo2Zuy2fEF+YgFeP08PWFo5FiJ' crossorigin='anonymous'%3E%3C/script%3E"));
-    </script>    
+    <script type="text/javascript" src="https://festivetechcalendar.com/assets/js/snowstorm-min.js"></script>
+    <!-- IE support: add promises polyfill before msal.js  -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/bluebird@3.7.2/js/browser/bluebird.min.js"></script>
+    <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.0.0-beta.4/js/msal-browser.js" integrity="sha384-7sxY2tN3GMVE5jXH2RL9AdbO6s46vUh9lUid4yNCHJMUzDoj+0N4ve6rLOmR88yN" crossorigin="anonymous"></script>
     <title>Festive Tech Calendar - Christmas Whishes</title>
     <style>
       #toast {
@@ -38,6 +36,12 @@
                 <img src="festivetechcalendar.jpg" width="500px">
               <h1 class="is-size-1">Christmas Whishes</h1>
             </div>
+            <div>
+              <button type="button" id="signIn" class="btn btn-success" onclick="signIn()">Sign In</button>
+            </div>            
+          </div>
+          <div>
+            <h5 class="is-size-4" id="welcomeMessage">Please Sign In to create or see whishes.</h5>
           </div>
         </div>
       
@@ -45,14 +49,6 @@
       <section class="section">
         <div class="container">
           <div>
-            <button type="button" id="signIn" class="btn btn-success" onclick="signIn()">Sign In</button>
-            <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
-          </div>
-          <div>
-            <h5 class="is-size-4" id="welcomeMessage">Please sign-in to create or see whishes.</h5>
-          </div>
-          <div>
-            <button type="button" id="seeWhishes" class="btn btn-success" onclick="seeWhishes()">Load Whishes</button>
             <button class="button is-info" @click="showModal = true">
               + Create Wish
             </button>
@@ -70,7 +66,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(whish, index) in whishes" v-key="whish.id">
+                <tr v-for="(whish, index) in whishes" v-key="whish.id" v-if="whish">
                   <td>
                     <input class="input" type="text" v-model="whish.name" />
                   </td>
@@ -101,8 +97,8 @@
                       class="delete is-large has-background-danger"
                       @click="deleteWhish(whish.id, index)"
                     ></a>
-                  </td>
-                </tr>
+                  </td>                  
+                </tr>            
               </tbody>
             </table>
             <div class="has-text-centered" v-show="whishes.length < 1">
@@ -158,11 +154,15 @@
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <!-- importing auth app scripts (load order is important) -->
+
+    <!-- importing app scripts (load order is important) -->
     <script type="text/javascript" src="./authConfig.js"></script>
-    <script type="text/javascript" src="./apiConfig.js"></script>
-    <script type="text/javascript" src="./authUi.js"></script>    
+    <!-- <script type="text/javascript" src="./apiConfig.js"></script> -->
+    <script type="text/javascript" src="./authUi.js"></script>
     <script type="text/javascript" src="./authPopup.js"></script>
-    <script type="text/javascript" src="./index.js"></script>
+
+    <!-- moving index script at end because of auth dependencies -->
+    <script src="index.js"></script>
+
   </body>
 </html>
