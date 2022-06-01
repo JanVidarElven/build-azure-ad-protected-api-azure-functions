@@ -10,7 +10,7 @@
     const account = myMSALObj.getAllAccounts()[0];
 
     const accessTokenRequest = {
-      scopes: ["api://festivetechcalendarapi/access_as_user", "api://festivetechcalendarapi/Whish.ReadWrite"],
+      scopes: ["api://whishesapi/access_as_user", "api://whishesapi/Whish.ReadWrite"],
       account: account
     }
 
