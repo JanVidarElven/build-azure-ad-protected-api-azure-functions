@@ -16,7 +16,7 @@ Add scopes for:
 - Whish.ReadWrite (User and Admin Consent)
 - Whish.ReadWrite.All (Admin Consent only)
 
-In the Whishes Client App Registration, add the API permissions for the Whises API, do not consent on behalf of organization.
+In the Whishes Client App Registration, add the API permissions for the Whishes API, do not consent on behalf of organization.
 
 Add Authentication Platforms for:
 
