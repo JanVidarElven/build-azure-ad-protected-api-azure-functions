@@ -36,7 +36,7 @@ Make sure to support ID and Access Token for Implicit Flows, in the Manifest it 
 @{
     # For latest supported version, go to 'https://www.powershellgallery.com/packages/Az'.
     # To use the Az module in your function app, please uncomment the line below.
-    'Az' = '8.*'
+    'Az' = '10.*'
     'JWTDetails' = '1.*'
 }
 ```

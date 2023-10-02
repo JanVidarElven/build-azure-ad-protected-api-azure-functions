@@ -17,7 +17,7 @@ The /api folder contains the Azure Functions local project, and needs a local.se
     "AzureWebJobsStorage": "",
     "FUNCTIONS_WORKER_RUNTIME_VERSION": "~7",
     "FUNCTIONS_WORKER_RUNTIME": "powershell",
-    "Festive_CosmosDB": "AccountEndpoint=https://cosmos-elven-protected-api.documents.azure.com:443//;AccountKey=jnrSbHmSDDDVzo1St4mWSHn……;"
+    "ProtectedAPI_CosmosDB": "AccountEndpoint=https://cosmos-elven-protected-api.documents.azure.com:443//;AccountKey=jnrSbHmSDDDVzo1St4mWSHn……;"
     },
 "Host": {
     "CORS": "*"
